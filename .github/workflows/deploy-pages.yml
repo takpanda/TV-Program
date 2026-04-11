@@ -1,0 +1,44 @@
+name: 🌐 GitHub Pages へデプロイ
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+      - 'programs.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時デプロイは 1 つのみ許可（進行中のデプロイはキャンセルしない）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: GitHub Pages を設定
+        uses: actions/configure-pages@v5
+
+      - name: サイトファイルをアップロード
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # リポジトリのルートをそのまま公開
+          path: '.'
+
+      - name: GitHub Pages へデプロイ
+        id: deployment
+        uses: actions/deploy-pages@v4
