@@ -1,39 +1,108 @@
 {
   "settings": {
-    "title": "週間テレビ番組表",
+    "title": "週間テレビ番組表（2026年春クール）",
     "startHour": 18,
     "endHour": 25,
     "slotMinutes": 30
   },
   "channels": [
-    { "id": "nhk1",     "name": "NHK総合",  "color": "#1a5276" },
-    { "id": "nhk2",     "name": "NHK-E",    "color": "#1e7e45" },
-    { "id": "ntv",      "name": "日テレ",   "color": "#a93226" },
-    { "id": "tbs",      "name": "TBS",      "color": "#7d3c98" },
-    { "id": "fuji",     "name": "フジ",     "color": "#b84200" },
-    { "id": "tv_asahi", "name": "テレ朝",   "color": "#0e7a63" },
-    { "id": "tv_tokyo", "name": "テレ東",   "color": "#1f618d" }
+    { "id": "nhk1",     "name": "NHK総合",  "color": "#1a3a5e" },
+    { "id": "ntv",      "name": "日テレ",   "color": "#c0392b" },
+    { "id": "tbs",      "name": "TBS",      "color": "#6c3483" },
+    { "id": "fuji",     "name": "フジ",     "color": "#d35400" },
+    { "id": "tv_asahi", "name": "テレ朝",   "color": "#117a65" },
+    { "id": "tv_tokyo", "name": "テレ東",   "color": "#1a5276" }
   ],
   "programs": [
-    { "title": "NHKニュース7",        "channel": "nhk1",     "day": "月", "startTime": "19:00", "endTime": "19:30", "memo": "" },
-    { "title": "サンプルドラマA",      "channel": "tbs",      "day": "月", "startTime": "21:00", "endTime": "22:00", "memo": "毎週月曜" },
-    { "title": "サンプルバラエティB",  "channel": "fuji",     "day": "月", "startTime": "23:00", "endTime": "23:30", "memo": "" },
-    { "title": "NHKニュース7",        "channel": "nhk1",     "day": "火", "startTime": "19:00", "endTime": "19:30", "memo": "" },
-    { "title": "サンプルドラマC",      "channel": "ntv",      "day": "火", "startTime": "22:00", "endTime": "22:54", "memo": "要録画" },
-    { "title": "アニメ深夜X",         "channel": "tv_tokyo", "day": "火", "startTime": "24:30", "endTime": "25:00", "memo": "" },
-    { "title": "NHKニュース7",        "channel": "nhk1",     "day": "水", "startTime": "19:00", "endTime": "19:30", "memo": "" },
-    { "title": "サンプルドラマD",      "channel": "tv_asahi", "day": "水", "startTime": "21:00", "endTime": "21:54", "memo": "" },
-    { "title": "サンプルドラマE",      "channel": "fuji",     "day": "水", "startTime": "22:00", "endTime": "22:54", "memo": "" },
-    { "title": "ドキュメンタリーF",    "channel": "nhk1",     "day": "木", "startTime": "22:50", "endTime": "23:20", "memo": "" },
-    { "title": "アニメG",             "channel": "tv_tokyo", "day": "木", "startTime": "24:00", "endTime": "24:30", "memo": "" },
-    { "title": "サンプルクイズH",      "channel": "tbs",      "day": "金", "startTime": "19:00", "endTime": "20:00", "memo": "" },
-    { "title": "サンプルバラエティI",  "channel": "ntv",      "day": "金", "startTime": "21:00", "endTime": "22:00", "memo": "" },
-    { "title": "深夜ドラマJ",         "channel": "tbs",      "day": "金", "startTime": "24:12", "endTime": "25:00", "memo": "最終回注意" },
-    { "title": "アニメK",             "channel": "nhk2",     "day": "土", "startTime": "18:00", "endTime": "18:30", "memo": "" },
-    { "title": "スポーツ中継L",        "channel": "nhk1",     "day": "土", "startTime": "20:00", "endTime": "21:30", "memo": "" },
-    { "title": "バラエティM",         "channel": "fuji",     "day": "土", "startTime": "21:00", "endTime": "22:00", "memo": "" },
-    { "title": "大河ドラマN",         "channel": "nhk1",     "day": "日", "startTime": "20:00", "endTime": "20:45", "memo": "" },
-    { "title": "サンプルドラマO",      "channel": "tv_asahi", "day": "日", "startTime": "21:00", "endTime": "21:54", "memo": "" },
-    { "title": "サンプルバラエティP",  "channel": "tbs",      "day": "日", "startTime": "22:00", "endTime": "23:00", "memo": "" }
+    {
+      "title": "産まない女はダメですか？ DINKsのトツキトオカ",
+      "channel": "tv_tokyo", "day": "月", "startTime": "22:00", "endTime": "22:54",
+      "memo": "テレ東 月曜22時"
+    },
+    {
+      "title": "リボーン ～最後のヒーロー～",
+      "channel": "tv_asahi", "day": "火", "startTime": "21:00", "endTime": "21:54",
+      "memo": "テレ朝 火曜21時 ／ 4/14スタート"
+    },
+    {
+      "title": "東京P.D. 警視庁広報2係",
+      "channel": "fuji",     "day": "火", "startTime": "21:00", "endTime": "21:54",
+      "memo": "フジ 火曜21時"
+    },
+    {
+      "title": "時すでにおスシ!?",
+      "channel": "tbs",      "day": "火", "startTime": "22:00", "endTime": "22:54",
+      "memo": "TBS 火曜ドラマ"
+    },
+    {
+      "title": "ボーダレス～広域移動捜査隊～",
+      "channel": "tv_asahi", "day": "水", "startTime": "21:00", "endTime": "21:54",
+      "memo": "テレ朝 水曜21時"
+    },
+    {
+      "title": "LOVED ONE",
+      "channel": "fuji",     "day": "水", "startTime": "21:00", "endTime": "21:54",
+      "memo": "フジ 水曜21時"
+    },
+    {
+      "title": "月夜行路 ―答えは名作の中に―",
+      "channel": "ntv",      "day": "水", "startTime": "22:00", "endTime": "22:54",
+      "memo": "日テレ 水曜ドラマ ／ 4/8スタート"
+    },
+    {
+      "title": "サレタ側の復讐 ～同盟を結んだ妻たち～",
+      "channel": "tv_tokyo", "day": "水", "startTime": "22:00", "endTime": "22:54",
+      "memo": "テレ東 水曜22時"
+    },
+    {
+      "title": "未解決の女 警視庁文書捜査官 Season3",
+      "channel": "tv_asahi", "day": "木", "startTime": "21:00", "endTime": "21:54",
+      "memo": "テレ朝 木曜21時 ／ 4/16スタート"
+    },
+    {
+      "title": "今夜、秘密のキッチンで",
+      "channel": "fuji",     "day": "木", "startTime": "22:00", "endTime": "22:54",
+      "memo": "フジ 木曜22時 ／ 4/9スタート"
+    },
+    {
+      "title": "君が死刑になる前に",
+      "channel": "ntv",      "day": "木", "startTime": "22:00", "endTime": "22:54",
+      "memo": "読売テレビ 木曜22時"
+    },
+    {
+      "title": "田鎖ブラザーズ",
+      "channel": "tbs",      "day": "金", "startTime": "22:00", "endTime": "22:54",
+      "memo": "TBS 金曜ドラマ ／ 4/17スタート"
+    },
+    {
+      "title": "孤独のグルメ Season11",
+      "channel": "tv_tokyo", "day": "金", "startTime": "22:00", "endTime": "22:54",
+      "memo": "テレ東 金曜22時"
+    },
+    {
+      "title": "タツキ先生は甘すぎる！",
+      "channel": "ntv",      "day": "土", "startTime": "21:00", "endTime": "21:54",
+      "memo": "日テレ 土曜21時 ／ 4/11スタート"
+    },
+    {
+      "title": "大河ドラマ",
+      "channel": "nhk1",     "day": "日", "startTime": "20:00", "endTime": "20:45",
+      "memo": "NHK 日曜20時"
+    },
+    {
+      "title": "GIFT",
+      "channel": "tbs",      "day": "日", "startTime": "21:00", "endTime": "21:54",
+      "memo": "TBS 日曜劇場 ／ 4/12スタート"
+    },
+    {
+      "title": "エラー",
+      "channel": "tv_asahi", "day": "日", "startTime": "22:15", "endTime": "23:09",
+      "memo": "テレ朝 日曜22:15 ／ 4/12スタート"
+    },
+    {
+      "title": "10回切って倒れない木はない",
+      "channel": "ntv",      "day": "日", "startTime": "22:30", "endTime": "23:24",
+      "memo": "日テレ 日曜22:30 ／ 4/12スタート"
+    }
   ]
 }

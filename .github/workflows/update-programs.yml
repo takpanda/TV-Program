@@ -1,0 +1,80 @@
+name: 📺 週間番組表の自動更新
+
+on:
+  schedule:
+    # 毎週月曜 00:00 JST（日曜 15:00 UTC）に実行
+    - cron: '0 15 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'ドライラン（PRを作成しない）'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  update-programs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      models: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install openai
+
+      - name: 番組情報を更新
+        id: update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+        run: python scripts/update_programs.py
+
+      - name: 変更確認
+        id: diff
+        run: |
+          if git diff --quiet programs.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "変更なし"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "programs.json に変更あり"
+            git diff --stat programs.json
+          fi
+
+      - name: Pull Request を作成
+        if: steps.diff.outputs.changed == 'true' && (inputs.dry_run != 'true')
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: 番組表を自動更新 (${{ env.UPDATE_SEASON }})"
+          title: "📺 週間番組表の自動更新 (${{ env.UPDATE_SEASON }})"
+          body: |
+            ## 📺 番組表の自動更新
+
+            GitHub Models API（Copilot）を使って `programs.json` を現在のクールの番組情報に更新しました。
+
+            ### 確認事項
+            - [ ] 番組タイトルが正確か確認
+            - [ ] 放送日時が正確か確認
+            - [ ] チャンネル情報が正確か確認
+
+            > ⚠️ AI が生成した情報のため、実際の放送スケジュールと異なる場合があります。マージ前に内容を必ずご確認ください。
+          branch: auto-update/tv-programs
+          delete-branch: true
+          labels: |
+            automated
+            tv-programs
