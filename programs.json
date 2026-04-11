@@ -15,9 +15,9 @@
   ],
   "programs": [
     {
-      "title": "産まない女はダメですか？ DINKsのトツキトオカ",
-      "channel": "tv_tokyo", "day": "月", "startTime": "22:00", "endTime": "22:54",
-      "memo": "テレ東 月曜22時"
+      "title": "サバ缶、宇宙へ行く",
+      "channel": "fuji",     "day": "月", "startTime": "21:00", "endTime": "21:54",
+      "memo": "フジ 月曜21時 ／ 4/13スタート"
     },
     {
       "title": "リボーン ～最後のヒーロー～",
@@ -25,9 +25,9 @@
       "memo": "テレ朝 火曜21時 ／ 4/14スタート"
     },
     {
-      "title": "東京P.D. 警視庁広報2係",
+      "title": "夫婦別姓刑事",
       "channel": "fuji",     "day": "火", "startTime": "21:00", "endTime": "21:54",
-      "memo": "フジ 火曜21時"
+      "memo": "フジ 火9 ／ 4/14スタート"
     },
     {
       "title": "時すでにおスシ!?",
@@ -48,6 +48,11 @@
       "title": "月夜行路 ―答えは名作の中に―",
       "channel": "ntv",      "day": "水", "startTime": "22:00", "endTime": "22:54",
       "memo": "日テレ 水曜ドラマ ／ 4/8スタート"
+    },
+    {
+      "title": "102回目のプロポーズ",
+      "channel": "fuji",     "day": "水", "startTime": "22:00", "endTime": "22:54",
+      "memo": "フジ 水曜22時 ／ 4/1スタート"
     },
     {
       "title": "サレタ側の復讐 ～同盟を結んだ妻たち～",
@@ -75,6 +80,11 @@
       "memo": "TBS 金曜ドラマ ／ 4/17スタート"
     },
     {
+      "title": "刑事、ふりだしに戻る",
+      "channel": "tv_tokyo", "day": "金", "startTime": "21:00", "endTime": "21:54",
+      "memo": "テレ東 金曜21時 ／ 4/17スタート"
+    },
+    {
       "title": "孤独のグルメ Season11",
       "channel": "tv_tokyo", "day": "金", "startTime": "22:00", "endTime": "22:54",
       "memo": "テレ東 金曜22時"
@@ -85,9 +95,9 @@
       "memo": "日テレ 土曜21時 ／ 4/11スタート"
     },
     {
-      "title": "大河ドラマ",
+      "title": "豊臣兄弟！",
       "channel": "nhk1",     "day": "日", "startTime": "20:00", "endTime": "20:45",
-      "memo": "NHK 日曜20時"
+      "memo": "NHK大河ドラマ ／ 日曜20時"
     },
     {
       "title": "GIFT",
