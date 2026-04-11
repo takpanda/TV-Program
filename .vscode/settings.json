@@ -1,0 +1,18 @@
+{
+    "switchboard.team.strictPrompts": false,
+    "switchboard.planner.strictPrompts": false,
+    "switchboard.review.strictPrompts": false,
+    "mcpServers": {
+        "switchboard": {
+            "command": "node",
+            "args": [
+                "/Users/t.aoki/IdeaWork/20260411-TV-Program/.switchboard/MCP/mcp-server.js"
+            ],
+            "env": {
+                "SWITCHBOARD_WORKSPACE_ROOT": "/Users/t.aoki/IdeaWork/20260411-TV-Program"
+            },
+            "disabled": false,
+            "alwaysAllow": []
+        }
+    }
+}

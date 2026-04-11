@@ -1,0 +1,39 @@
+{
+  "settings": {
+    "title": "週間テレビ番組表",
+    "startHour": 18,
+    "endHour": 25,
+    "slotMinutes": 30
+  },
+  "channels": [
+    { "id": "nhk1",     "name": "NHK総合",  "color": "#1a5276" },
+    { "id": "nhk2",     "name": "NHK-E",    "color": "#1e7e45" },
+    { "id": "ntv",      "name": "日テレ",   "color": "#a93226" },
+    { "id": "tbs",      "name": "TBS",      "color": "#7d3c98" },
+    { "id": "fuji",     "name": "フジ",     "color": "#b84200" },
+    { "id": "tv_asahi", "name": "テレ朝",   "color": "#0e7a63" },
+    { "id": "tv_tokyo", "name": "テレ東",   "color": "#1f618d" }
+  ],
+  "programs": [
+    { "title": "NHKニュース7",        "channel": "nhk1",     "day": "月", "startTime": "19:00", "endTime": "19:30", "memo": "" },
+    { "title": "サンプルドラマA",      "channel": "tbs",      "day": "月", "startTime": "21:00", "endTime": "22:00", "memo": "毎週月曜" },
+    { "title": "サンプルバラエティB",  "channel": "fuji",     "day": "月", "startTime": "23:00", "endTime": "23:30", "memo": "" },
+    { "title": "NHKニュース7",        "channel": "nhk1",     "day": "火", "startTime": "19:00", "endTime": "19:30", "memo": "" },
+    { "title": "サンプルドラマC",      "channel": "ntv",      "day": "火", "startTime": "22:00", "endTime": "22:54", "memo": "要録画" },
+    { "title": "アニメ深夜X",         "channel": "tv_tokyo", "day": "火", "startTime": "24:30", "endTime": "25:00", "memo": "" },
+    { "title": "NHKニュース7",        "channel": "nhk1",     "day": "水", "startTime": "19:00", "endTime": "19:30", "memo": "" },
+    { "title": "サンプルドラマD",      "channel": "tv_asahi", "day": "水", "startTime": "21:00", "endTime": "21:54", "memo": "" },
+    { "title": "サンプルドラマE",      "channel": "fuji",     "day": "水", "startTime": "22:00", "endTime": "22:54", "memo": "" },
+    { "title": "ドキュメンタリーF",    "channel": "nhk1",     "day": "木", "startTime": "22:50", "endTime": "23:20", "memo": "" },
+    { "title": "アニメG",             "channel": "tv_tokyo", "day": "木", "startTime": "24:00", "endTime": "24:30", "memo": "" },
+    { "title": "サンプルクイズH",      "channel": "tbs",      "day": "金", "startTime": "19:00", "endTime": "20:00", "memo": "" },
+    { "title": "サンプルバラエティI",  "channel": "ntv",      "day": "金", "startTime": "21:00", "endTime": "22:00", "memo": "" },
+    { "title": "深夜ドラマJ",         "channel": "tbs",      "day": "金", "startTime": "24:12", "endTime": "25:00", "memo": "最終回注意" },
+    { "title": "アニメK",             "channel": "nhk2",     "day": "土", "startTime": "18:00", "endTime": "18:30", "memo": "" },
+    { "title": "スポーツ中継L",        "channel": "nhk1",     "day": "土", "startTime": "20:00", "endTime": "21:30", "memo": "" },
+    { "title": "バラエティM",         "channel": "fuji",     "day": "土", "startTime": "21:00", "endTime": "22:00", "memo": "" },
+    { "title": "大河ドラマN",         "channel": "nhk1",     "day": "日", "startTime": "20:00", "endTime": "20:45", "memo": "" },
+    { "title": "サンプルドラマO",      "channel": "tv_asahi", "day": "日", "startTime": "21:00", "endTime": "21:54", "memo": "" },
+    { "title": "サンプルバラエティP",  "channel": "tbs",      "day": "日", "startTime": "22:00", "endTime": "23:00", "memo": "" }
+  ]
+}
