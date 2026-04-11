@@ -404,11 +404,10 @@ function assignColumns(progs) {
 /* ── Main builder ── */
 function buildSchedule(data) {
   const { settings, channels, programs } = data;
-  const startH     = settings.startHour   ?? 18;
-  const endH       = settings.endHour     ?? 25;
   const slotMins   = settings.slotMinutes ?? 30;
-  const startMin   = startH * 60;
-  const endMin     = endH   * 60;
+  const nowMin     = getNowMinutes();
+  const startMin   = Math.max(0, Math.floor((nowMin - 120) / slotMins) * slotMins);
+  const endMin     = Math.ceil((nowMin + 180) / slotMins) * slotMins;
   const totalSlots = (endMin - startMin) / slotMins;
   const totalPx    = totalSlots * SLOT_PX;
 
@@ -440,7 +439,6 @@ function buildSchedule(data) {
   const flex   = document.getElementById('schedule-flex');
   flex.innerHTML = '';
   const today  = getTodayDay();
-  const nowMin = getNowMinutes();
   const todayIdx   = DAYS.indexOf(today);
   const orderedDays = todayIdx >= 0
     ? [...DAYS.slice(todayIdx), ...DAYS.slice(0, todayIdx)]
