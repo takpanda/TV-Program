@@ -80,7 +80,7 @@ def build_prompt(season: str) -> str:
 
 def call_github_models(client: OpenAI, prompt: str) -> dict:
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="claude-sonnet-4-6",
         messages=[
             {
                 "role": "system",
@@ -92,7 +92,6 @@ def call_github_models(client: OpenAI, prompt: str) -> dict:
             {"role": "user", "content": prompt},
         ],
         temperature=0.2,
-        response_format={"type": "json_object"},
     )
     raw = response.choices[0].message.content
     return json.loads(raw)

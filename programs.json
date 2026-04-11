@@ -1,7 +1,7 @@
 {
   "settings": {
     "title": "週間テレビ番組表（2026年春クール）",
-    "startHour": 18,
+    "startHour": 20,
     "endHour": 25,
     "slotMinutes": 30
   },

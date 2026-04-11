@@ -91,7 +91,6 @@
     /* ── Main flex container ── */
     .schedule-flex {
       display: flex;
-      min-width: 820px;
     }
 
     /* ── Time Column ── */
@@ -133,8 +132,8 @@
 
     /* ── Day Columns ── */
     .day-col-wrap {
-      flex: 1;
-      min-width: 100px;
+      flex: 0 0 calc((100vw - 66px) / 4);
+      min-width: 0;
       padding: 0 1px;
     }
 
@@ -442,6 +441,10 @@ function buildSchedule(data) {
   flex.innerHTML = '';
   const today  = getTodayDay();
   const nowMin = getNowMinutes();
+  const todayIdx   = DAYS.indexOf(today);
+  const orderedDays = todayIdx >= 0
+    ? [...DAYS.slice(todayIdx), ...DAYS.slice(0, todayIdx)]
+    : DAYS;
 
   /* ── Time column ── */
   const tcWrap = el('div', 'time-col-wrap');
@@ -462,7 +465,7 @@ function buildSchedule(data) {
   flex.appendChild(tcWrap);
 
   /* ── Day columns ── */
-  DAYS.forEach(day => {
+  orderedDays.forEach(day => {
     const isToday  = day === today;
     const isWknd   = WKND_SET.has(day);
     const dayColor = DAY_COLORS[day] || '#607d8b';
