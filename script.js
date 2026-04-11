@@ -95,9 +95,83 @@ function assignColumns(progs) {
   return progs.map((_, i) => ({ col: cols[i], totalCols: totalColsMap[i] }));
 }
 
+/* ── Ticker Banner builder ── */
+function buildTicker(items) {
+  if (!items || !items.length) return;
+
+  const wrap = document.getElementById('ticker-wrap');
+  if (!wrap) return;
+  wrap.className = 'ticker-wrap';
+
+  const label = document.createElement('div');
+  label.className = 'ticker-label';
+  label.textContent = '💬 口コミ';
+  wrap.appendChild(label);
+
+  const trackWrap = document.createElement('div');
+  trackWrap.className = 'ticker-track-wrap';
+
+  const track = document.createElement('div');
+  track.className = 'ticker-track';
+
+  // Duplicate for seamless infinite loop
+  [...items, ...items].forEach((item, idx) => {
+    const span = document.createElement('span');
+    span.className = 'ticker-item';
+    span.innerHTML =
+      `<span class="ticker-item-title ${escHtml(item.sentiment || 'positive')}">【${escHtml(item.title)}】</span>` +
+      escHtml(item.text) +
+      `<span class="ticker-sep">｜</span>`;
+    track.appendChild(span);
+  });
+
+  trackWrap.appendChild(track);
+  wrap.appendChild(trackWrap);
+}
+
+/* ── Ranking Panel builder ── */
+function buildRanking(data) {
+  const { channels, ranking } = data;
+  if (!ranking || !ranking.length) return;
+
+  const chMap = Object.fromEntries(channels.map(c => [c.id, c]));
+  const panel = document.getElementById('ranking-panel');
+  if (!panel) return;
+
+  const title = document.createElement('div');
+  title.className = 'ranking-panel-title';
+  title.textContent = '🏆 話題のドラマ TOP 10';
+  panel.appendChild(title);
+
+  const MEDALS = ['medal-gold', 'medal-silver', 'medal-bronze'];
+
+  ranking.forEach(item => {
+    const ch = chMap[item.channel] || { name: item.channel, color: '#8c959f' };
+    const badgeCls = item.rank <= 3 ? MEDALS[item.rank - 1] : 'rank-normal';
+
+    const card = document.createElement('div');
+    card.className = 'rank-card';
+    card.title = `${item.rank}位 ${item.title}（${ch.name}）`;
+
+    card.innerHTML =
+      `<div class="rank-badge ${escHtml(badgeCls)}">${escHtml(String(item.rank))}</div>` +
+      `<div class="rank-card-body">` +
+        `<div class="rank-title">${escHtml(item.title)}</div>` +
+        `<span class="rank-ch" style="background:${escHtml(ch.color)}">${escHtml(ch.name)}</span>` +
+      `</div>`;
+
+    panel.appendChild(card);
+  });
+}
+
 /* ── Main builder ── */
 function buildSchedule(data) {
   const { settings, channels, programs } = data;
+
+  /* Ranking panel */
+  buildRanking(data);
+
+  /* Ticker banner — loaded separately */
   const slotMins   = settings.slotMinutes ?? 30;
   const nowMin     = getNowMinutes();
   const startMin   = Math.max(0, Math.floor((nowMin - 120) / slotMins) * slotMins);
@@ -244,12 +318,20 @@ function buildSchedule(data) {
 }
 
 /* ── Boot ── */
-fetch('programs.json')
-  .then(r => {
+Promise.all([
+  fetch('programs.json').then(r => {
     if (!r.ok) throw new Error(`HTTP ${r.status} — programs.json を取得できません`);
     return r.json();
+  }),
+  fetch('kuchikomi.json').then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status} — kuchikomi.json を取得できません`);
+    return r.json();
   })
-  .then(buildSchedule)
+])
+  .then(([programsData, kuchikoiData]) => {
+    buildSchedule(programsData);
+    buildTicker(kuchikoiData);
+  })
   .catch(err => {
     document.getElementById('schedule-flex').innerHTML =
       `<div class="error-box">

@@ -13,6 +13,18 @@
     { "id": "tv_asahi", "name": "テレ朝",   "color": "#117a65" },
     { "id": "tv_tokyo", "name": "テレ東",   "color": "#1a5276" }
   ],
+  "ranking": [
+    { "rank": 1,  "title": "田鎖ブラザーズ",              "channel": "tbs" },
+    { "rank": 2,  "title": "GIFT",                       "channel": "tbs" },
+    { "rank": 3,  "title": "豊臣兄弟！",                  "channel": "nhk1" },
+    { "rank": 4,  "title": "時すでにおスシ!?",             "channel": "tbs" },
+    { "rank": 5,  "title": "タツキ先生は甘すぎる！",        "channel": "ntv" },
+    { "rank": 6,  "title": "サバ缶、宇宙へ行く",           "channel": "fuji" },
+    { "rank": 7,  "title": "月夜行路 ―答えは名作の中に―",  "channel": "ntv" },
+    { "rank": 8,  "title": "リボーン ～最後のヒーロー～",   "channel": "tv_asahi" },
+    { "rank": 9,  "title": "孤独のグルメ Season11",        "channel": "tv_tokyo" },
+    { "rank": 10, "title": "未解決の女 警視庁文書捜査官 Season3", "channel": "tv_asahi" }
+  ],
   "programs": [
     {
       "title": "サバ缶、宇宙へ行く",

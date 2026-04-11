@@ -75,11 +75,233 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Schedule wrapper ── */
+/* ── Main layout (ranking + schedule) ── */
+.main-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+/* ── Ranking Panel ── */
+.ranking-panel {
+  width: 170px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 44px;
+  height: calc(100vh - 44px);
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 8px 6px 24px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.ranking-panel-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 4px 6px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 6px;
+}
+
+/* ── Rank Card ── */
+.rank-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 4px;
+  border-radius: 4px;
+  cursor: default;
+  transition: background .12s;
+}
+
+.rank-card:hover {
+  background: #f0f4fc;
+}
+
+.rank-card + .rank-card {
+  border-top: 1px solid var(--border-light);
+}
+
+/* ── Rank Badge ── */
+.rank-badge {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.rank-badge.medal-gold   { background: #f0a500; color: #fff; }
+.rank-badge.medal-silver { background: #aab0b8; color: #fff; }
+.rank-badge.medal-bronze { background: #c8713a; color: #fff; }
+.rank-badge.rank-normal  { background: transparent; color: var(--text-muted); font-size: 12px; }
+
+/* ── Rank Card Body ── */
+.rank-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rank-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+  margin-bottom: 3px;
+}
+
+.rank-ch {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── schedule-wrapper: take remaining space ── */
 .schedule-wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow-x: auto;
   padding: 10px 10px 40px;
 }
+
+/* ── Mobile: ranking moves above schedule ── */
+@media (max-width: 700px) {
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .ranking-panel {
+    width: 100%;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 10px 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    overflow-x: auto;
+    overflow-y: visible;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+
+  .ranking-panel-title {
+    display: none;
+  }
+
+  .rank-card {
+    flex-direction: column;
+    align-items: center;
+    min-width: 68px;
+    max-width: 80px;
+    padding: 6px 4px 8px;
+    border-top: none !important;
+    text-align: center;
+    gap: 4px;
+  }
+
+  .rank-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rank-title {
+    font-size: 10px;
+    -webkit-line-clamp: 2;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+}
+
+/* ── Ticker Banner ── */
+.ticker-wrap {
+  overflow: hidden;
+  background: #1c2128;
+  border-bottom: 1px solid #30363d;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-label {
+  flex-shrink: 0;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #f0a500;
+  letter-spacing: 0.05em;
+  border-right: 1px solid #30363d;
+  background: #1c2128;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.ticker-track-wrap {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ticker-scroll 100s linear infinite;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 28px;
+  font-size: 13px;
+  color: #cdd5de;
+  line-height: 36px;
+}
+
+.ticker-item-title          { font-weight: 700; color: #7dd3fc; }
+.ticker-item-title.positive { color: #7dd3fc; }
+.ticker-item-title.negative { color: #f97316; }
+.ticker-item-title.mixed    { color: #facc15; }
+
+.ticker-sep {
+  color: #30363d;
+  font-size: 14px;
+  padding: 0 4px;
+}
+
+/* ── Schedule wrapper (override old standalone rule) ── */
 
 /* ── Main flex container ── */
 .schedule-flex {

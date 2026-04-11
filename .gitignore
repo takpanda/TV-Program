@@ -3,3 +3,4 @@
 .switchboard/kanban.db
 .switchboard/*.db-shm
 .switchboard/*.db-wal
+.playwright-mcp
