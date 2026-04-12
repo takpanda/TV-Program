@@ -1,0 +1,95 @@
+name: Update kuchikomi.json with Claude Code
+
+on:
+  schedule:
+    # 毎週月曜 00:00 JST に実行
+    - cron: '0 15 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'ドライラン（PR 作成をスキップ）'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  update-kuchikomi:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate existing kuchikomi.json
+        run: python scripts/update_kuchikomi.py --validate
+
+      - name: Run Claude Code to update kuchikomi.json
+        id: claude-update
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You are a repository automation assistant.
+            Update `kuchikomi.json` in place based on the guidance in `.github/skills/update-kuchikomi/SKILL.md` and the current `programs.json`.
+            Use the existing `kuchikomi.json` as the starting point and produce a final valid JSON array.
+            The updated file must contain objects with the keys `title`, `sentiment`, and `text`.
+            `sentiment` must be one of `positive`, `negative`, or `mixed`.
+            `text` must begin with a sentiment emoji and be written in a concise, social-media-like tone.
+            Prefer 10–15 entries and preserve existing titles when possible.
+            Do not modify any files other than `kuchikomi.json`.
+            After writing the updated file, run `python scripts/update_kuchikomi.py --validate`.
+          claude_args: |
+            --model claude-4-0-sonnet-20250805
+            --allowed-tools Bash
+          additional_permissions: |
+            actions: read
+
+      - name: Validate updated kuchikomi.json
+        run: python scripts/update_kuchikomi.py --validate
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet kuchikomi.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "kuchikomi.json has changed"
+            git diff --stat kuchikomi.json
+          fi
+
+      - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true' && inputs.dry_run != 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: kuchikomi.json を自動更新'
+          title: '📣 kuchikomi.json 自動更新'
+          body: |
+            GitHub Actions + Claude Code によって `kuchikomi.json` を更新しました。
+
+            ### 確認事項
+            - [ ] 口コミ内容が最新の反応を反映しているか
+            - [ ] sentiment と絵文字が一致しているか
+            - [ ] タイトルが `programs.json` の番組名と整合しているか
+          branch: auto-update/kuchikomi
+          delete-branch: true
+          labels: |
+            automated
+            kuchikomi
