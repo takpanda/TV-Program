@@ -2,7 +2,7 @@ name: Update kuchikomi.json with Claude Code
 
 on:
   schedule:
-    # 毎週月曜 00:00 JST に実行
+    # 毎週月曜 00:00 JST = 日曜 15:00 UTC
     - cron: '0 15 * * 0'
   workflow_dispatch:
     inputs:
@@ -15,14 +15,23 @@ on:
           - 'false'
           - 'true'
 
+concurrency:
+  group: update-kuchikomi
+  cancel-in-progress: false
+
 jobs:
   update-kuchikomi:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     permissions:
       contents: write
       pull-requests: write
       id-token: write
       actions: read
+
+    env:
+      PYTHONUNBUFFERED: "1"
 
     steps:
       - name: Checkout repository
@@ -42,20 +51,50 @@ jobs:
         id: claude-update
         uses: anthropics/claude-code-action@v1
         with:
+          # Claude Pro / Max のサブスクアカウントで発行した OAuth トークン
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          # GitHub 連携用
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
           prompt: |
             You are a repository automation assistant.
-            Update `kuchikomi.json` in place based on the guidance in `.github/skills/update-kuchikomi/SKILL.md` and the current `programs.json`.
-            Use the existing `kuchikomi.json` as the starting point and produce a final valid JSON array.
-            The updated file must contain objects with the keys `title`, `sentiment`, and `text`.
-            `sentiment` must be one of `positive`, `negative`, or `mixed`.
-            `text` must begin with a sentiment emoji and be written in a concise, social-media-like tone.
-            Prefer 10–15 entries and preserve existing titles when possible.
-            Do not modify any files other than `kuchikomi.json`.
-            After writing the updated file, run `python scripts/update_kuchikomi.py --validate`.
+
+            Goal:
+            Update `kuchikomi.json` in place based on:
+            - `.github/skills/update-kuchikomi/SKILL.md`
+            - `programs.json`
+            - the current `kuchikomi.json`
+
+            Requirements:
+            - Modify only `kuchikomi.json`
+            - Produce a valid JSON array
+            - Each object must contain exactly:
+              - `title`
+              - `sentiment`
+              - `text`
+            - `sentiment` must be one of:
+              - `positive`
+              - `negative`
+              - `mixed`
+            - `text` must:
+              - start with a sentiment emoji
+              - be concise
+              - feel like a short social-media post
+            - Prefer 10–15 entries
+            - Preserve existing titles when possible
+            - Keep titles aligned with `programs.json`
+
+            Validation:
+            After editing the file, run:
+            `python scripts/update_kuchikomi.py --validate`
+
+            If validation fails, fix the file and rerun validation until it passes.
+
           claude_args: |
-            --model claude-4-0-sonnet-20250805
+            --model claude-sonnet-4-6
             --allowed-tools Bash
+
           additional_permissions: |
             actions: read
 
@@ -64,18 +103,20 @@ jobs:
 
       - name: Check for changes
         id: diff
+        shell: bash
         run: |
-          if git diff --quiet kuchikomi.json; then
-            echo "changed=false" >> $GITHUB_OUTPUT
+          set -euo pipefail
+          if git diff --quiet -- kuchikomi.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No changes"
           else
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "kuchikomi.json has changed"
-            git diff --stat kuchikomi.json
+            git diff --stat -- kuchikomi.json
           fi
 
       - name: Create Pull Request
-        if: steps.diff.outputs.changed == 'true' && inputs.dry_run != 'true'
+        if: steps.diff.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -88,8 +129,17 @@ jobs:
             - [ ] 口コミ内容が最新の反応を反映しているか
             - [ ] sentiment と絵文字が一致しているか
             - [ ] タイトルが `programs.json` の番組名と整合しているか
+
+            ### 補足
+            - 実行トリガー: schedule / workflow_dispatch
+            - dry_run=true の場合、PR は作成されません
           branch: auto-update/kuchikomi
           delete-branch: true
           labels: |
             automated
             kuchikomi
+
+      - name: Dry run summary
+        if: steps.diff.outputs.changed == 'true' && github.event.inputs.dry_run == 'true'
+        run: |
+          echo "dry_run=true のため PR 作成はスキップしました"
