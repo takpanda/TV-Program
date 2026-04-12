@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'index.html'
-      - 'programs.json'
   workflow_dispatch:
 
 permissions:
