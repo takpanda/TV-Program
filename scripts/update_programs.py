@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 """
-GitHub Models API (Copilot) を使って programs.json を自動更新するスクリプト。
-GitHub Actions の GITHUB_TOKEN（models: read 権限）で動作します。
+Claude Code CLI（サブスクリプション）を使って programs.json を自動更新するスクリプト。
+CLAUDE_CODE_OAUTH_TOKEN 環境変数が必要です。
 """
 
 import json
 import os
+import subprocess
 import sys
 import datetime
 from pathlib import Path
-
-try:
-    from openai import OpenAI
-except ImportError:
-    print("Error: openai パッケージがインストールされていません", file=sys.stderr)
-    sys.exit(1)
 
 REPO_ROOT = Path(__file__).parent.parent
 PROGRAMS_PATH = REPO_ROOT / "programs.json"
@@ -46,7 +41,8 @@ def get_season_label() -> str:
 
 def build_prompt(season: str) -> str:
     ch_list = "\n".join(f'- "{cid}": "{name}"' for cid, name in CHANNELS.items())
-    return f"""あなたは日本のテレビ番組情報の専門家です。
+    return f"""日本のテレビ番組情報の専門家として、正確な番組情報を JSON 形式のみで出力してください。JSON 以外のテキストは絶対に含めないでください。
+
 {season} の地上波主要6チャンネルの夜間ドラマ・バラエティ番組情報を JSON で提供してください。
 
 ## チャンネル ID
@@ -78,29 +74,26 @@ def build_prompt(season: str) -> str:
 """
 
 
-def call_github_models(client: OpenAI, prompt: str) -> dict:
-    response = client.chat.completions.create(
-        model="claude-sonnet-4-6",
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "日本のテレビ番組情報の専門家として、正確な番組情報を JSON 形式のみで出力してください。"
-                    "JSON 以外のテキストは絶対に含めないでください。"
-                ),
-            },
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.2,
+def call_claude(prompt: str) -> dict:
+    result = subprocess.run(
+        ["claude", "-p", prompt, "--output-format", "text"],
+        capture_output=True,
+        text=True,
+        check=True,
     )
-    raw = response.choices[0].message.content
+    raw = result.stdout.strip()
+    # ```json ... ``` のコードブロックで囲まれている場合は除去
+    if raw.startswith("```"):
+        raw = raw.split("```", 2)[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+        raw = raw.strip()
     return json.loads(raw)
 
 
 def main() -> None:
-    token = os.environ.get("GITHUB_TOKEN")
-    if not token:
-        print("Error: GITHUB_TOKEN が設定されていません", file=sys.stderr)
+    if not os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
+        print("Error: CLAUDE_CODE_OAUTH_TOKEN が設定されていません", file=sys.stderr)
         sys.exit(1)
 
     dry_run = os.environ.get("DRY_RUN", "false").lower() == "true"
@@ -112,14 +105,9 @@ def main() -> None:
     season = get_season_label()
     print(f"🗓  対象シーズン: {season}")
 
-    client = OpenAI(
-        base_url="https://models.inference.ai.azure.com",
-        api_key=token,
-    )
-
-    print("🤖 GitHub Models API へリクエスト中...")
+    print("🤖 Claude Code へリクエスト中...")
     prompt = build_prompt(season)
-    result = call_github_models(client, prompt)
+    result = call_claude(prompt)
 
     programs = result.get("programs", [])
     if not programs:

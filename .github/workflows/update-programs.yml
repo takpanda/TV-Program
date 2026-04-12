@@ -20,26 +20,29 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      models: read
       pull-requests: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: pip
-
-      - name: Install dependencies
-        run: pip install openai
 
       - name: 番組情報を更新
         id: update
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
         run: python scripts/update_programs.py
 
@@ -65,7 +68,7 @@ jobs:
           body: |
             ## 📺 番組表の自動更新
 
-            GitHub Models API（Copilot）を使って `programs.json` を現在のクールの番組情報に更新しました。
+            Claude Code（サブスクリプション）を使って `programs.json` を現在のクールの番組情報に更新しました。
 
             ### 確認事項
             - [ ] 番組タイトルが正確か確認

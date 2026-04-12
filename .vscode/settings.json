@@ -14,5 +14,12 @@
             "disabled": false,
             "alwaysAllow": []
         }
+    },
+    "chat.tools.terminal.autoApprove": {
+        "/^gh run list --repo takpanda/TV-Program --limit 20 --json databaseId,displayTitle,workflowName,event,headBranch,conclusion,createdAt --jq '\\.\\[\\] \\| \\{id:\\.databaseId,name:\\.displayTitle,workflow:\\.workflowName,event:\\.event,branch:\\.headBranch,conclusion:\\.conclusion,created:\\.createdAt\\}'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "gh": true
     }
 }

@@ -2,8 +2,8 @@ name: Update kuchikomi.json with Claude Code
 
 on:
   schedule:
-    # 毎週月曜 00:00 JST = 日曜 15:00 UTC
-    - cron: '0 15 * * 0'
+    # 毎週月曜 00:01 JST = 日曜 15:01 UTC
+    - cron: '0 16 * * 0'
   workflow_dispatch:
     inputs:
       dry_run:
