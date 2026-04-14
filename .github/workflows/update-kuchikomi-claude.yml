@@ -93,7 +93,7 @@ jobs:
 
           claude_args: |
             --model claude-sonnet-4-6
-            --allowed-tools Bash
+            --allowed-tools Bash,WebSearch,WebFetch
 
           additional_permissions: |
             actions: read
