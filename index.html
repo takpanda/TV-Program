@@ -9,8 +9,18 @@
 <body>
 
 <header class="app-header">
-  <div class="app-title" id="app-title">週間テレビ番組表</div>
-  <div class="date-label" id="date-label"></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="app-title" id="app-title">週間テレビ番組表</div>
+    <div class="date-label" id="date-label"></div>
+  </div>
+  <div class="refresh-controls" style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+    <button id="refresh-btn" class="refresh-btn" title="手動でデータを最新化">更新</button>
+    <label style="display:flex;align-items:center;gap:6px;">
+      <input type="checkbox" id="auto-refresh" checked>
+      自動更新
+    </label>
+    <span id="refresh-status" style="font-size:12px;color:#54707a;"></span>
+  </div>
 </header>
 
 <div id="legend-wrap"></div>

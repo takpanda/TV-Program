@@ -318,22 +318,49 @@ function buildSchedule(data) {
 }
 
 /* ── Boot ── */
-Promise.all([
-  fetch('programs.json').then(r => {
-    if (!r.ok) throw new Error(`HTTP ${r.status} — programs.json を取得できません`);
-    return r.json();
-  }),
-  fetch('kuchikomi.json').then(r => {
-    if (!r.ok) throw new Error(`HTTP ${r.status} — kuchikomi.json を取得できません`);
-    return r.json();
-  })
-])
+const DEFAULT_REFRESH_INTERVAL = 60 * 1000; // 60s
+let autoTimer = null;
+let refreshInProgress = false;
+
+function setRefreshStatus(msg, isError) {
+  const el = document.getElementById('refresh-status');
+  if (el) { el.textContent = msg || ''; el.style.color = isError ? '#cf222e' : '#54707a'; }
+}
+
+function clearTickerAndRanking() {
+  const tw = document.getElementById('ticker-wrap'); if (tw) tw.innerHTML = '';
+  const rp = document.getElementById('ranking-panel'); if (rp) rp.innerHTML = '';
+  const lg = document.getElementById('legend-wrap'); if (lg) lg.innerHTML = '';
+}
+
+function fetchAndRender() {
+  if (refreshInProgress) return Promise.resolve();
+  refreshInProgress = true;
+  const btn = document.getElementById('refresh-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '更新中…'; }
+  setRefreshStatus('読み込み中…');
+
+  const scrollY = window.scrollY || 0;
+  const scheduleFlex = document.getElementById('schedule-flex');
+  const scheduleScroll = scheduleFlex ? scheduleFlex.scrollLeft : 0;
+
+  clearTickerAndRanking();
+
+  return Promise.all([
+    fetch('programs.json').then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} — programs.json を取得できません`); return r.json(); }),
+    fetch('kuchikomi.json').then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} — kuchikomi.json を取得できません`); return r.json(); })
+  ])
   .then(([programsData, kuchikoiData]) => {
     buildSchedule(programsData);
     buildTicker(kuchikoiData);
+    const sf = document.getElementById('schedule-flex');
+    if (sf) sf.scrollLeft = scheduleScroll;
+    window.scrollTo(0, scrollY);
+    setRefreshStatus('更新完了');
   })
   .catch(err => {
-    document.getElementById('schedule-flex').innerHTML =
+    const container = document.getElementById('schedule-flex');
+    if (container) container.innerHTML =
       `<div class="error-box">
         <h2>データを読み込めませんでした</h2>
         <p>このファイルはローカルサーバー経由で開く必要があります。<br>
@@ -342,4 +369,41 @@ Promise.all([
         <p>起動後、<a href="http://localhost:8000">http://localhost:8000</a> にアクセスしてください。</p>
         <p style="margin-top:12px;font-size:11px;color:#8c959f">詳細: ${escHtml(err.message)}</p>
       </div>`;
+    setRefreshStatus('データ取得エラー', true);
+    console.error(err);
+  })
+  .finally(() => {
+    refreshInProgress = false;
+    if (btn) { btn.disabled = false; btn.textContent = '更新'; }
   });
+}
+
+function startAutoRefresh(intervalMs = DEFAULT_REFRESH_INTERVAL) {
+  stopAutoRefresh();
+  autoTimer = setInterval(() => { fetchAndRender(); }, intervalMs);
+}
+function stopAutoRefresh() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+
+// Wire up controls and initial load
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('refresh-btn');
+  if (btn) btn.addEventListener('click', () => { fetchAndRender(); });
+
+  const autoCheckbox = document.getElementById('auto-refresh');
+  if (autoCheckbox) {
+    autoCheckbox.addEventListener('change', (e) => {
+      if (e.target.checked) { startAutoRefresh(); setRefreshStatus('自動更新: ON'); }
+      else { stopAutoRefresh(); setRefreshStatus('自動更新: OFF'); }
+    });
+    if (autoCheckbox.checked) { startAutoRefresh(); setRefreshStatus('自動更新: ON'); }
+  }
+
+  // Refresh when window gains focus (helps when returning to tab)
+  window.addEventListener('focus', () => {
+    const auto = document.getElementById('auto-refresh');
+    if (auto && auto.checked) fetchAndRender();
+  });
+
+  // initial load
+  fetchAndRender();
+});
