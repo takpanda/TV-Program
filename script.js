@@ -1,7 +1,7 @@
 "use strict";
 
 /* ── Constants ── */
-const SLOT_PX  = 72;   // px per 30-minute slot
+const SLOT_PX_DEFAULT = 72;  // fallback px per 30-minute slot
 const DAYS     = ['月','火','水','木','金','土','日'];
 const WKND_SET = new Set(['土','日']);
 
@@ -171,12 +171,19 @@ function buildSchedule(data) {
 
   buildRanking(data);
 
-  /* Fixed time range: 18:00〜24:00（23時台まで） */
+  /* Fixed time range: 20:00〜24:00（23時台まで） */
   const slotMins   = settings.slotMinutes ?? 30;
   const nowMin     = getNowMinutes();
-  const startMin   = 18 * 60;
+  const startMin   = 20 * 60;
   const endMin     = 24 * 60;
   const totalSlots = (endMin - startMin) / slotMins;
+
+  /* Dynamically calculate slot height to fill the schedule-wrapper */
+  const sw = document.querySelector('.schedule-wrapper');
+  const availH = sw ? sw.clientHeight : 600;
+  const DAY_HDR_H = 48;
+  const SLOT_PX = Math.max(36, Math.floor((availH - DAY_HDR_H - 4) / totalSlots));
+
   const totalPx    = totalSlots * SLOT_PX;
 
   /* Page title */
