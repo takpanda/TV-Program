@@ -6,6 +6,7 @@ CLAUDE_CODE_OAUTH_TOKEN 環境変数が必要です。
 
 import json
 import os
+import re
 import subprocess
 import sys
 import datetime
@@ -75,6 +76,32 @@ def build_prompt(season: str) -> str:
 """
 
 
+def extract_json(text: str) -> dict:
+    """Claude の出力テキストから JSON オブジェクト/配列を抽出して返す。
+
+    マークダウンのコードフェンス、前後の説明文、複数 JSON の連結など
+    Claude が余分なテキストを出力した場合も堅牢に処理する。
+    """
+    # マークダウンコードフェンス（```json ... ``` または ``` ... ```）を除去
+    text = re.sub(r"```(?:json)?\s*([\s\S]*?)```", r"\1", text)
+
+    # 高速パス: テキスト全体が有効な JSON の場合
+    stripped = text.strip()
+    try:
+        return json.loads(stripped)
+    except json.JSONDecodeError:
+        pass
+
+    # フォールバック: テキスト内の最初の JSON オブジェクト/配列を探す
+    decoder = json.JSONDecoder()
+    m = re.search(r"[{[]", text)
+    if not m:
+        raise ValueError("モデル出力に JSON オブジェクト/配列が見つかりませんでした")
+
+    obj, _ = decoder.raw_decode(text, m.start())
+    return obj
+
+
 def call_claude(prompt: str) -> dict:
     result = subprocess.run(
         ["claude", "-p", prompt, "--output-format", "text"],
@@ -83,13 +110,14 @@ def call_claude(prompt: str) -> dict:
         check=True,
     )
     raw = result.stdout.strip()
-    # ```json ... ``` のコードブロックで囲まれている場合は除去
-    if raw.startswith("```"):
-        raw = raw.split("```", 2)[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-        raw = raw.strip()
-    return json.loads(raw)
+    try:
+        return extract_json(raw)
+    except Exception as exc:
+        raise RuntimeError(
+            "Claude の出力を JSON として解析できませんでした。\n"
+            f"エラー: {exc}\n"
+            f"出力の先頭 500 文字: {raw[:500]!r}"
+        ) from exc
 
 
 def main() -> None:

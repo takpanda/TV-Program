@@ -4,3 +4,8 @@
 .switchboard/*.db-shm
 .switchboard/*.db-wal
 .playwright-mcp
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
