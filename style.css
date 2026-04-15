@@ -16,7 +16,7 @@ body {
   color: var(--text);
   font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', 'Yu Gothic UI', sans-serif;
   min-height: 100vh;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 /* ── App Header ── */
@@ -34,13 +34,13 @@ body {
 }
 
 .app-title {
-  font-size: 14px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
 }
 
 .date-label {
-  font-size: 11px;
+  font-size: 16px;
   color: var(--text-sub);
 }
 
@@ -56,7 +56,7 @@ body {
 }
 
 .legend-label {
-  font-size: 10px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -64,7 +64,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 15px;
   color: var(--text-sub);
 }
 
@@ -84,7 +84,7 @@ body {
 
 /* ── Ranking Panel ── */
 .ranking-panel {
-  width: 170px;
+  width: 220px;
   flex-shrink: 0;
   position: sticky;
   top: 44px;
@@ -98,7 +98,7 @@ body {
 }
 
 .ranking-panel-title {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.08em;
@@ -154,7 +154,7 @@ body {
 }
 
 .rank-title {
-  font-size: 11px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
   line-height: 1.35;
@@ -170,7 +170,7 @@ body {
   display: inline-block;
   padding: 1px 5px;
   border-radius: 2px;
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
@@ -181,7 +181,7 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   overflow-x: auto;
-  padding: 10px 10px 40px;
+  padding: 4px 4px 16px;
 }
 
 /* ── Mobile: ranking moves above schedule ── */
@@ -228,7 +228,7 @@ body {
   }
 
   .rank-title {
-    font-size: 10px;
+    font-size: 12px;
     -webkit-line-clamp: 2;
     text-align: center;
     margin-bottom: 2px;
@@ -240,15 +240,15 @@ body {
   overflow: hidden;
   background: #1c2128;
   border-bottom: 1px solid #30363d;
-  height: 36px;
+  height: 48px;
   display: flex;
   align-items: center;
 }
 
 .ticker-label {
   flex-shrink: 0;
-  padding: 0 12px;
-  font-size: 12px;
+  padding: 0 16px;
+  font-size: 17px;
   font-weight: 700;
   color: #f0a500;
   letter-spacing: 0.05em;
@@ -283,11 +283,11 @@ body {
 .ticker-item {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 28px;
-  font-size: 13px;
+  gap: 6px;
+  padding: 0 32px;
+  font-size: 17px;
   color: #cdd5de;
-  line-height: 36px;
+  line-height: 48px;
 }
 
 .ticker-item-title          { font-weight: 700; color: #7dd3fc; }
@@ -310,7 +310,7 @@ body {
 
 /* ── Time Column ── */
 .time-col-wrap {
-  width: 46px;
+  width: 52px;
   flex-shrink: 0;
   position: sticky;
   left: 0;
@@ -318,7 +318,7 @@ body {
   background: var(--bg);
 }
 
-.time-col-spacer { height: 36px; }
+.time-col-spacer { height: 48px; }
 
 .time-col {
   position: relative;
@@ -335,30 +335,30 @@ body {
 }
 
 .time-tick.hour-mark {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--text-sub);
 }
 
 .time-tick.half-mark {
-  font-size: 9px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
 /* ── Day Columns ── */
 .day-col-wrap {
-  flex: 0 0 calc((100vw - 66px) / 4);
+  flex: 0 0 calc((100vw - 220px - 52px - 8px) / 3);
   min-width: 0;
   padding: 0 1px;
 }
 
 .day-header {
-  height: 36px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 20px;
   color: #fff;
   letter-spacing: 0.05em;
   border-radius: 3px 3px 0 0;
@@ -447,14 +447,14 @@ body {
 }
 
 .prog-start {
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-muted);
-  margin-bottom: 1px;
+  margin-bottom: 2px;
 }
 
 .prog-title {
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text);
   line-height: 1.3;
@@ -463,27 +463,27 @@ body {
 
 .prog-ch {
   display: inline-block;
-  margin-top: 2px;
-  padding: 1px 4px;
+  margin-top: 3px;
+  padding: 2px 6px;
   border-radius: 2px;
-  font-size: 9px;
+  font-size: 13px;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
 }
 
 .prog-memo {
-  font-size: 9px;
+  font-size: 12px;
   color: var(--text-muted);
-  margin-top: 1px;
+  margin-top: 2px;
   font-style: italic;
 }
 
 /* Refresh controls */
 .refresh-controls { display:flex; align-items:center; gap:8px; }
 .refresh-btn {
-  background: #0969da; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;
-  font-weight: 700; font-size: 12px;
+  background: #0969da; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+  font-weight: 700; font-size: 16px;
 }
 .refresh-btn[disabled] { opacity: 0.6; cursor: default; }
 

@@ -1,19 +1,19 @@
 "use strict";
 
 /* ── Constants ── */
-const SLOT_PX  = 48;   // px per 30-minute slot
+const SLOT_PX  = 72;   // px per 30-minute slot
 const DAYS     = ['月','火','水','木','金','土','日'];
 const WKND_SET = new Set(['土','日']);
 
-/* Day header colors — distinct per day like channel colors in reference */
+/* Day header colors */
 const DAY_COLORS = {
-  '月': '#1565c0',   /* blue        */
-  '火': '#c62828',   /* red         */
-  '水': '#2e7d32',   /* green       */
-  '木': '#e65100',   /* deep-orange */
-  '金': '#6a1b9a',   /* purple      */
-  '土': '#0277bd',   /* light-blue  */
-  '日': '#b71c1c',   /* dark-red    */
+  '月': '#1565c0',
+  '火': '#c62828',
+  '水': '#2e7d32',
+  '木': '#e65100',
+  '金': '#6a1b9a',
+  '土': '#0277bd',
+  '日': '#b71c1c',
 };
 
 /* ── Helpers ── */
@@ -53,7 +53,6 @@ function el(tag, cls) {
 
 /**
  * Greedy interval-graph coloring with per-cluster totalCols.
- * Returns [{ col, totalCols }] for each program in input order.
  */
 function assignColumns(progs) {
   if (!progs.length) return [];
@@ -114,8 +113,7 @@ function buildTicker(items) {
   const track = document.createElement('div');
   track.className = 'ticker-track';
 
-  // Duplicate for seamless infinite loop
-  [...items, ...items].forEach((item, idx) => {
+  [...items, ...items].forEach((item) => {
     const span = document.createElement('span');
     span.className = 'ticker-item';
     span.innerHTML =
@@ -166,16 +164,18 @@ function buildRanking(data) {
 
 /* ── Main builder ── */
 function buildSchedule(data) {
+  const rankPanel = document.getElementById('ranking-panel');
+  if (rankPanel) rankPanel.innerHTML = '';
+
   const { settings, channels, programs } = data;
 
-  /* Ranking panel */
   buildRanking(data);
 
-  /* Ticker banner — loaded separately */
+  /* Fixed time range: 18:00〜24:00（23時台まで） */
   const slotMins   = settings.slotMinutes ?? 30;
   const nowMin     = getNowMinutes();
-  const startMin   = Math.max(0, Math.floor((nowMin - 120) / slotMins) * slotMins);
-  const endMin     = Math.ceil((nowMin + 180) / slotMins) * slotMins;
+  const startMin   = 18 * 60;
+  const endMin     = 24 * 60;
   const totalSlots = (endMin - startMin) / slotMins;
   const totalPx    = totalSlots * SLOT_PX;
 
@@ -204,10 +204,10 @@ function buildSchedule(data) {
       ).join('')}
     </div>`;
 
-  const flex   = document.getElementById('schedule-flex');
+  const flex    = document.getElementById('schedule-flex');
   flex.innerHTML = '';
-  const today  = getTodayDay();
-  const todayIdx   = DAYS.indexOf(today);
+  const today   = getTodayDay();
+  const todayIdx    = DAYS.indexOf(today);
   const orderedDays = todayIdx >= 0
     ? [...DAYS.slice(todayIdx), ...DAYS.slice(0, todayIdx)]
     : DAYS;
@@ -235,16 +235,13 @@ function buildSchedule(data) {
     const isToday  = day === today;
     const isWknd   = WKND_SET.has(day);
     const dayColor = DAY_COLORS[day] || '#607d8b';
-    /* Brighten today's header slightly */
-    const hdrBg = isToday
-      ? dayColor
-      : (isWknd ? dayColor + 'cc' : dayColor + 'dd');
+    const hdrBg    = isToday ? dayColor : (isWknd ? dayColor + 'cc' : dayColor + 'dd');
 
     const wrap = el('div', 'day-col-wrap');
 
     /* Header */
     const hdr = el('div', 'day-header' + (isToday ? ' today' : ''));
-    hdr.style.background  = hdrBg;
+    hdr.style.background = hdrBg;
     hdr.textContent = day + '曜';
     if (isToday) hdr.style.boxShadow = `inset 0 -3px 0 rgba(255,255,255,0.35)`;
     wrap.appendChild(hdr);
@@ -290,21 +287,21 @@ function buildSchedule(data) {
       const ch = chMap[prog.channel] || { name: prog.channel, color: '#8c959f' };
 
       const card = el('div', 'program-card');
-      card.style.top              = top + 'px';
-      card.style.height           = ht  + 'px';
-      card.style.left             = lPct + '%';
-      card.style.width            = `calc(${wPct}% - 2px)`;
-      card.style.borderLeftColor  = ch.color;
+      card.style.top             = top + 'px';
+      card.style.height          = ht  + 'px';
+      card.style.left            = lPct + '%';
+      card.style.width           = `calc(${wPct}% - 2px)`;
+      card.style.borderLeftColor = ch.color;
       card.title =
         `${prog.title}\n${prog.startTime}〜${prog.endTime}  ${ch.name}` +
         (prog.memo ? `\n📝 ${prog.memo}` : '');
 
       let inner = `<div class="prog-start">${escHtml(fmtHHMM(toMins(prog.startTime)))}</div>`;
       inner    += `<div class="prog-title">${escHtml(prog.title)}</div>`;
-      if (ht >= 26) {
+      if (ht >= 36) {
         inner += `<span class="prog-ch" style="background:${escHtml(ch.color)}">${escHtml(ch.name)}</span>`;
       }
-      if (prog.memo && ht >= 40) {
+      if (prog.memo && ht >= 60) {
         inner += `<div class="prog-memo">${escHtml(prog.memo)}</div>`;
       }
       card.innerHTML = inner;
@@ -318,7 +315,7 @@ function buildSchedule(data) {
 }
 
 /* ── Boot ── */
-const DEFAULT_REFRESH_INTERVAL = 60 * 1000; // 60s
+const DEFAULT_REFRESH_INTERVAL = 60 * 1000;
 let autoTimer = null;
 let refreshInProgress = false;
 
@@ -341,8 +338,8 @@ function fetchAndRender() {
   setRefreshStatus('読み込み中…');
 
   const scrollY = window.scrollY || 0;
-  const scheduleFlex = document.getElementById('schedule-flex');
-  const scheduleScroll = scheduleFlex ? scheduleFlex.scrollLeft : 0;
+  const sw = document.querySelector('.schedule-wrapper');
+  const scheduleScroll = sw ? sw.scrollLeft : 0;
 
   clearTickerAndRanking();
 
@@ -353,8 +350,7 @@ function fetchAndRender() {
   .then(([programsData, kuchikoiData]) => {
     buildSchedule(programsData);
     buildTicker(kuchikoiData);
-    const sf = document.getElementById('schedule-flex');
-    if (sf) sf.scrollLeft = scheduleScroll;
+    if (sw) sw.scrollLeft = scheduleScroll;
     window.scrollTo(0, scrollY);
     setRefreshStatus('更新完了');
   })
@@ -384,7 +380,6 @@ function startAutoRefresh(intervalMs = DEFAULT_REFRESH_INTERVAL) {
 }
 function stopAutoRefresh() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
 
-// Wire up controls and initial load
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('refresh-btn');
   if (btn) btn.addEventListener('click', () => { fetchAndRender(); });
@@ -398,12 +393,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (autoCheckbox.checked) { startAutoRefresh(); setRefreshStatus('自動更新: ON'); }
   }
 
-  // Refresh when window gains focus (helps when returning to tab)
   window.addEventListener('focus', () => {
     const auto = document.getElementById('auto-refresh');
     if (auto && auto.checked) fetchAndRender();
   });
 
-  // initial load
   fetchAndRender();
 });
