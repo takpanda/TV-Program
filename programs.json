@@ -6,125 +6,225 @@
     "slotMinutes": 30
   },
   "channels": [
-    { "id": "nhk1",     "name": "NHK総合",  "color": "#1a3a5e" },
-    { "id": "ntv",      "name": "日テレ",   "color": "#c0392b" },
-    { "id": "tbs",      "name": "TBS",      "color": "#6c3483" },
-    { "id": "fuji",     "name": "フジ",     "color": "#d35400" },
-    { "id": "tv_asahi", "name": "テレ朝",   "color": "#117a65" },
-    { "id": "tv_tokyo", "name": "テレ東",   "color": "#1a5276" }
+    {
+      "id": "nhk1",
+      "name": "NHK総合",
+      "color": "#1a3a5e"
+    },
+    {
+      "id": "ntv",
+      "name": "日テレ",
+      "color": "#c0392b"
+    },
+    {
+      "id": "tbs",
+      "name": "TBS",
+      "color": "#6c3483"
+    },
+    {
+      "id": "fuji",
+      "name": "フジ",
+      "color": "#d35400"
+    },
+    {
+      "id": "tv_asahi",
+      "name": "テレ朝",
+      "color": "#117a65"
+    },
+    {
+      "id": "tv_tokyo",
+      "name": "テレ東",
+      "color": "#1a5276"
+    }
   ],
   "ranking": [
-    { "rank": 1,  "title": "田鎖ブラザーズ",              "channel": "tbs" },
-    { "rank": 2,  "title": "GIFT",                       "channel": "tbs" },
-    { "rank": 3,  "title": "豊臣兄弟！",                  "channel": "nhk1" },
-    { "rank": 4,  "title": "時すでにおスシ!?",             "channel": "tbs" },
-    { "rank": 5,  "title": "タツキ先生は甘すぎる！",        "channel": "ntv" },
-    { "rank": 6,  "title": "サバ缶、宇宙へ行く",           "channel": "fuji" },
-    { "rank": 7,  "title": "月夜行路 ―答えは名作の中に―",  "channel": "ntv" },
-    { "rank": 8,  "title": "リボーン ～最後のヒーロー～",   "channel": "tv_asahi" },
-    { "rank": 9,  "title": "孤独のグルメ Season11",        "channel": "tv_tokyo" },
-    { "rank": 10, "title": "未解決の女 警視庁文書捜査官 Season3", "channel": "tv_asahi" }
+    {
+      "rank": 1,
+      "title": "田鎖ブラザーズ",
+      "channel": "tbs"
+    },
+    {
+      "rank": 2,
+      "title": "GIFT",
+      "channel": "tbs"
+    },
+    {
+      "rank": 3,
+      "title": "豊臣兄弟！",
+      "channel": "nhk1"
+    },
+    {
+      "rank": 4,
+      "title": "時すでにおスシ!?",
+      "channel": "tbs"
+    },
+    {
+      "rank": 5,
+      "title": "タツキ先生は甘すぎる！",
+      "channel": "ntv"
+    },
+    {
+      "rank": 6,
+      "title": "サバ缶、宇宙へ行く",
+      "channel": "fuji"
+    },
+    {
+      "rank": 7,
+      "title": "月夜行路 ―答えは名作の中に―",
+      "channel": "ntv"
+    },
+    {
+      "rank": 8,
+      "title": "リボーン ～最後のヒーロー～",
+      "channel": "tv_asahi"
+    },
+    {
+      "rank": 9,
+      "title": "孤独のグルメ Season11",
+      "channel": "tv_tokyo"
+    },
+    {
+      "rank": 10,
+      "title": "未解決の女 警視庁文書捜査官 Season3",
+      "channel": "tv_asahi"
+    }
   ],
   "programs": [
     {
+      "title": "豊臣兄弟！",
+      "channel": "nhk1",
+      "day": "日",
+      "startTime": "20:00",
+      "endTime": "20:45",
+      "memo": "NHK総合 日曜20時 ／ 1/4スタート（大河ドラマ）"
+    },
+    {
       "title": "サバ缶、宇宙へ行く",
-      "channel": "fuji",     "day": "月", "startTime": "21:00", "endTime": "21:54",
+      "channel": "fuji",
+      "day": "月",
+      "startTime": "21:00",
+      "endTime": "21:54",
       "memo": "フジ 月曜21時 ／ 4/13スタート"
     },
     {
       "title": "リボーン ～最後のヒーロー～",
-      "channel": "tv_asahi", "day": "火", "startTime": "21:00", "endTime": "21:54",
+      "channel": "tv_asahi",
+      "day": "火",
+      "startTime": "21:00",
+      "endTime": "21:54",
       "memo": "テレ朝 火曜21時 ／ 4/14スタート"
     },
     {
-      "title": "夫婦別姓刑事",
-      "channel": "fuji",     "day": "火", "startTime": "21:00", "endTime": "21:54",
-      "memo": "フジ 火9 ／ 4/14スタート"
-    },
-    {
       "title": "時すでにおスシ!?",
-      "channel": "tbs",      "day": "火", "startTime": "22:00", "endTime": "22:54",
-      "memo": "TBS 火曜ドラマ"
-    },
-    {
-      "title": "ボーダレス～広域移動捜査隊～",
-      "channel": "tv_asahi", "day": "水", "startTime": "21:00", "endTime": "21:54",
-      "memo": "テレ朝 水曜21時"
-    },
-    {
-      "title": "LOVED ONE",
-      "channel": "fuji",     "day": "水", "startTime": "21:00", "endTime": "21:54",
-      "memo": "フジ 水曜21時"
+      "channel": "tbs",
+      "day": "火",
+      "startTime": "22:00",
+      "endTime": "22:54",
+      "memo": "TBS 火曜ドラマ ／ 4/7スタート"
     },
     {
       "title": "月夜行路 ―答えは名作の中に―",
-      "channel": "ntv",      "day": "水", "startTime": "22:00", "endTime": "22:54",
-      "memo": "日テレ 水曜ドラマ ／ 4/8スタート"
+      "channel": "ntv",
+      "day": "水",
+      "startTime": "22:00",
+      "endTime": "22:54",
+      "memo": "日テレ 水曜22時 ／ 4/8スタート"
     },
     {
       "title": "102回目のプロポーズ",
-      "channel": "fuji",     "day": "水", "startTime": "22:00", "endTime": "22:54",
+      "channel": "fuji",
+      "day": "水",
+      "startTime": "22:00",
+      "endTime": "22:54",
       "memo": "フジ 水曜22時 ／ 4/1スタート"
     },
     {
       "title": "サレタ側の復讐 ～同盟を結んだ妻たち～",
-      "channel": "tv_tokyo", "day": "水", "startTime": "22:00", "endTime": "22:54",
-      "memo": "テレ東 水曜22時"
+      "channel": "tv_tokyo",
+      "day": "水",
+      "startTime": "22:00",
+      "endTime": "22:54",
+      "memo": "テレ東 水曜22時 ／ 4/8スタート"
     },
     {
       "title": "未解決の女 警視庁文書捜査官 Season3",
-      "channel": "tv_asahi", "day": "木", "startTime": "21:00", "endTime": "21:54",
+      "channel": "tv_asahi",
+      "day": "木",
+      "startTime": "21:00",
+      "endTime": "21:54",
       "memo": "テレ朝 木曜21時 ／ 4/16スタート"
     },
     {
       "title": "今夜、秘密のキッチンで",
-      "channel": "fuji",     "day": "木", "startTime": "22:00", "endTime": "22:54",
+      "channel": "fuji",
+      "day": "木",
+      "startTime": "22:00",
+      "endTime": "22:54",
       "memo": "フジ 木曜22時 ／ 4/9スタート"
     },
     {
       "title": "君が死刑になる前に",
-      "channel": "ntv",      "day": "木", "startTime": "22:00", "endTime": "22:54",
-      "memo": "読売テレビ 木曜22時"
-    },
-    {
-      "title": "田鎖ブラザーズ",
-      "channel": "tbs",      "day": "金", "startTime": "22:00", "endTime": "22:54",
-      "memo": "TBS 金曜ドラマ ／ 4/17スタート"
+      "channel": "ntv",
+      "day": "木",
+      "startTime": "22:00",
+      "endTime": "22:54",
+      "memo": "日テレ 木曜22時 ／ 4/10スタート"
     },
     {
       "title": "刑事、ふりだしに戻る",
-      "channel": "tv_tokyo", "day": "金", "startTime": "21:00", "endTime": "21:54",
+      "channel": "tv_tokyo",
+      "day": "金",
+      "startTime": "21:00",
+      "endTime": "21:54",
       "memo": "テレ東 金曜21時 ／ 4/17スタート"
     },
     {
       "title": "孤独のグルメ Season11",
-      "channel": "tv_tokyo", "day": "金", "startTime": "22:00", "endTime": "22:54",
-      "memo": "テレ東 金曜22時"
+      "channel": "tv_tokyo",
+      "day": "金",
+      "startTime": "22:00",
+      "endTime": "22:54",
+      "memo": "テレ東 金曜22時 ／ 4/10スタート"
+    },
+    {
+      "title": "田鎖ブラザーズ",
+      "channel": "tbs",
+      "day": "金",
+      "startTime": "22:00",
+      "endTime": "22:54",
+      "memo": "TBS 金曜ドラマ ／ 4/17スタート"
     },
     {
       "title": "タツキ先生は甘すぎる！",
-      "channel": "ntv",      "day": "土", "startTime": "21:00", "endTime": "21:54",
+      "channel": "ntv",
+      "day": "土",
+      "startTime": "21:00",
+      "endTime": "21:54",
       "memo": "日テレ 土曜21時 ／ 4/11スタート"
     },
     {
-      "title": "豊臣兄弟！",
-      "channel": "nhk1",     "day": "日", "startTime": "20:00", "endTime": "20:45",
-      "memo": "NHK大河ドラマ ／ 日曜20時"
-    },
-    {
       "title": "GIFT",
-      "channel": "tbs",      "day": "日", "startTime": "21:00", "endTime": "21:54",
+      "channel": "tbs",
+      "day": "日",
+      "startTime": "21:00",
+      "endTime": "21:54",
       "memo": "TBS 日曜劇場 ／ 4/12スタート"
     },
     {
       "title": "エラー",
-      "channel": "tv_asahi", "day": "日", "startTime": "22:15", "endTime": "23:09",
-      "memo": "テレ朝 日曜22:15 ／ 4/12スタート"
+      "channel": "tv_asahi",
+      "day": "日",
+      "startTime": "22:15",
+      "endTime": "23:09",
+      "memo": "テレ朝 日曜22時15分 ／ 4/12スタート"
     },
     {
       "title": "10回切って倒れない木はない",
-      "channel": "ntv",      "day": "日", "startTime": "22:30", "endTime": "23:24",
-      "memo": "日テレ 日曜22:30 ／ 4/12スタート"
+      "channel": "ntv",
+      "day": "日",
+      "startTime": "22:30",
+      "endTime": "23:24",
+      "memo": "日テレ 日曜22時30分 ／ 4/12スタート"
     }
   ]
 }
