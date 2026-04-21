@@ -1,6 +1,6 @@
 name: Update kuchikomi.json with Claude Code
 
-'on':
+on:
   schedule:
     # 毎週月曜 00:01 JST（日曜 15:01 UTC）
     - cron: '0 16 * * 0'
