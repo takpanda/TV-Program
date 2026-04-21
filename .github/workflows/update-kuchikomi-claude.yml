@@ -27,8 +27,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      id-token: write
-      actions: read
 
     env:
       PYTHONUNBUFFERED: "1"
@@ -44,59 +42,55 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
       - name: Validate existing kuchikomi.json
         run: python scripts/update_kuchikomi.py --validate
 
-      - name: Run Claude Code to update kuchikomi.json
+      - name: Run Claude to update kuchikomi.json
         id: claude-update
-        uses: anthropics/claude-code-action@v1
-        with:
-          # Claude Pro / Max のサブスクアカウントで発行した OAuth トークン
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude \
+            --model claude-sonnet-4-6 \
+            --allowed-tools Bash,WebSearch,WebFetch,Edit,Write \
+            --dangerously-skip-permissions \
+            <<'PROMPT'
+You are a repository automation assistant.
 
-          # GitHub 連携用
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+Goal:
+Update `kuchikomi.json` in place based on:
+- `.github/skills/update-kuchikomi/SKILL.md`
+- `programs.json`
+- the current `kuchikomi.json`
 
-          prompt: |
-            You are a repository automation assistant.
+Requirements:
+- Modify only `kuchikomi.json`
+- Produce a valid JSON array
+- Each object must contain exactly:
+  - `title`
+  - `sentiment`
+  - `text`
+- `sentiment` must be one of:
+  - `positive`
+  - `negative`
+  - `mixed`
+- `text` must:
+  - start with a sentiment emoji
+  - be concise
+  - feel like a short social-media post
+- Prefer 10–15 entries
+- Preserve existing titles when possible
+- Keep titles aligned with `programs.json`
 
-            Goal:
-            Update `kuchikomi.json` in place based on:
-            - `.github/skills/update-kuchikomi/SKILL.md`
-            - `programs.json`
-            - the current `kuchikomi.json`
+Validation:
+After editing the file, run:
+`python scripts/update_kuchikomi.py --validate`
 
-            Requirements:
-            - Modify only `kuchikomi.json`
-            - Produce a valid JSON array
-            - Each object must contain exactly:
-              - `title`
-              - `sentiment`
-              - `text`
-            - `sentiment` must be one of:
-              - `positive`
-              - `negative`
-              - `mixed`
-            - `text` must:
-              - start with a sentiment emoji
-              - be concise
-              - feel like a short social-media post
-            - Prefer 10–15 entries
-            - Preserve existing titles when possible
-            - Keep titles aligned with `programs.json`
-
-            Validation:
-            After editing the file, run:
-            `python scripts/update_kuchikomi.py --validate`
-
-            If validation fails, fix the file and rerun validation until it passes.
-
-          claude_args: |
-            --model claude-sonnet-4-6
-            --allowed-tools Bash,WebSearch,WebFetch
-
-          additional_permissions: |
-            actions: read
+If validation fails, fix the file and rerun validation until it passes.
+PROMPT
 
       - name: Validate updated kuchikomi.json
         run: python scripts/update_kuchikomi.py --validate
