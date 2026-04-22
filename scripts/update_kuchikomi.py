@@ -13,7 +13,19 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KUCHIKOMI_PATH = REPO_ROOT / "kuchikomi.json"
 PROGRAMS_PATH = REPO_ROOT / "programs.json"
 VALID_SENTIMENTS = {"positive", "negative", "mixed"}
-VALID_EMOJI = {"🌟", "👍", "😍", "✨", "🔥", "👎", "😤", "💢", "🤔", "😅"}
+VALID_EMOJI = {
+    # 肯定的
+    "🌟", "✨", "👍", "😍", "💖", "❤️", "🎉", "👏",
+    # 否定的
+    "👎", "😤", "💢", "😡", "😞", "😿",
+    # 中立的・考察
+    "🤔", "😅", "🍜", "😄", "🔍", "😂", "💍",
+    # その他
+    "😰", "☕", "🦸", "😑", "🌙", "🐟",
+    # 追加可能な汎用感情絵文字
+    "😊", "😆", "🤣", "😢", "😭", "🥰", "💕",
+    "🎬", "📺", "🎭", "👀", "💪", "🙏",
+}
 EMOJI_PATTERN = re.compile(r"^[\u231A-\U0001F9FF]|^[^\s]", flags=re.UNICODE)
 
 
