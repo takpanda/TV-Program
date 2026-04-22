@@ -42,7 +42,9 @@ def get_season_label() -> str:
 
 def build_prompt(season: str) -> str:
     ch_list = "\n".join(f'- "{cid}": "{name}"' for cid, name in CHANNELS.items())
-    return f"""日本のテレビ番組情報の専門家として、正確な番組情報を JSON 形式のみで出力してください。JSON 以外のテキストは絶対に含めないでください。
+    return f"""日本のテレビ番組情報の専門家として、正確な番組情報を JSON 形式のみで出力してください。
+
+重要: すべての値（title, memo など）は必ず日本語で記述してください。英語や他の言語での出力は禁止です。
 
 {season} の地上波主要6チャンネルの夜間ドラマ・バラエティ番組情報を JSON で提供してください。
 
@@ -50,7 +52,7 @@ def build_prompt(season: str) -> str:
 {ch_list}
 
 ## 出力ルール
-- JSON のみ出力し、説明文は不要
+- JSON のみ出力し、説明文は不要。前後に日本語の解説文を入れないこと
 - キー名は以下のスキーマに従うこと
 - `day` は "月" "火" "水" "木" "金" "土" "日" のいずれか
 - `startTime` / `endTime` は "HH:MM" 形式（例: "21:00", "22:54", "24:20"）
@@ -58,18 +60,19 @@ def build_prompt(season: str) -> str:
 - 20:00〜21:59 開始のドラマは省略せずすべて含めること（チャンネル・曜日を問わない）
 - 上記以外の時間帯の番組は各チャンネルから代表的なものを選定すること
 - `memo` には "放送局 曜日時間帯 ／ 初回放送日（例: 4/7スタート）" を記載すること
+- **すべての文字列値は日本語で記述すること**
 
 ## 出力スキーマ
 {{
   "season_title": "週間テレビ番組表（{season}）",
   "programs": [
     {{
-      "title": "番組タイトル",
+      "title": "番組タイトル（日本語）",
       "channel": "チャンネルID",
       "day": "曜日",
       "startTime": "HH:MM",
       "endTime": "HH:MM",
-      "memo": "備考"
+      "memo": "備考（日本語）"
     }}
   ]
 }}
@@ -82,24 +85,68 @@ def extract_json(text: str) -> dict:
     マークダウンのコードフェンス、前後の説明文、複数 JSON の連結など
     Claude が余分なテキストを出力した場合も堅牢に処理する。
     """
-    # マークダウンコードフェンス（```json ... ``` または ``` ... ```）を除去
+    # 1. マークダウンコードフェンス（```json ... ``` または ``` ... ```）を除去
     text = re.sub(r"```(?:json)?\s*([\s\S]*?)```", r"\1", text)
 
-    # 高速パス: テキスト全体が有効な JSON の場合
+    # 2. 前後の空白を除去
     stripped = text.strip()
+
+    # 3. 高速パス: テキスト全体が有効な JSON の場合
     try:
         return json.loads(stripped)
     except json.JSONDecodeError:
         pass
 
-    # フォールバック: テキスト内の最初の JSON オブジェクト/配列を探す
+    # 4. JSON オブジェクト/配列の開始位置を探索（複数回トライ）
     decoder = json.JSONDecoder()
-    m = re.search(r"[{[]", text)
+
+    # 4a. 最初の { または [ を見つける
+    m = re.search(r"[{[]", stripped)
     if not m:
         raise ValueError("モデル出力に JSON オブジェクト/配列が見つかりませんでした")
 
-    obj, _ = decoder.raw_decode(text, m.start())
-    return obj
+    # 4b. 見つかった位置から JSON をパース
+    try:
+        obj, _ = decoder.raw_decode(stripped, m.start())
+        return obj
+    except json.JSONDecodeError:
+        pass
+
+    # 4c. フォールバック: } または ] の位置を推定して切り取る
+    #    最初の { から対応する } を探す（ネスト対応）
+    start_idx = m.start()
+    bracket_char = stripped[start_idx]
+    close_char = "}" if bracket_char == "{" else "]"
+    depth = 0
+    end_idx = start_idx
+    for i in range(start_idx, len(stripped)):
+        if stripped[i] == bracket_char:
+            depth += 1
+        elif stripped[i] == close_char:
+            depth -= 1
+            if depth == 0:
+                end_idx = i + 1
+                break
+    if end_idx > start_idx:
+        candidate = stripped[start_idx:end_idx]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+
+    # 4d. さらにフォールバック: 最後の } または ] を見つける
+    last_close = stripped.rfind(close_char)
+    if last_close > start_idx:
+        candidate = stripped[start_idx:last_close + 1]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+
+    raise ValueError(
+        f"モデル出力を JSON として解析できませんでした。\n"
+        f"出力の先頭 800 文字: {stripped[:800]!r}"
+    )
 
 
 def call_claude(prompt: str) -> dict:
