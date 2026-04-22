@@ -13,8 +13,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KUCHIKOMI_PATH = REPO_ROOT / "kuchikomi.json"
 PROGRAMS_PATH = REPO_ROOT / "programs.json"
 VALID_SENTIMENTS = {"positive", "negative", "mixed"}
-VALID_EMOJI = {"🌟", "👍", "😍", "✨", "🔥", "👎", "😤", "💢", "🤔", "😅"}
-EMOJI_PATTERN = re.compile(r"^[\u231A-\U0001F9FF]|^[^\s]", flags=re.UNICODE)
 
 
 def load_json(path: Path):
@@ -66,10 +64,7 @@ def validate_entry(entry: object, program_titles: set[str], index: int) -> list[
             errors.append(
                 f"entry[{index}].text length should be 20〜80 characters, got {len(normalized)}"
             )
-        if normalized[0] not in VALID_EMOJI:
-            errors.append(
-                f"entry[{index}].text should start with one of {sorted(VALID_EMOJI)}, got {normalized[:2]!r}"
-            )
+
 
     return errors
 
